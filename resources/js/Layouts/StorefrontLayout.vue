@@ -23,14 +23,6 @@ const mobileMenuOpen = ref(false);
     <div class="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-800">
         <Toast />
 
-        <!-- Notification Banner -->
-        <div class="bg-slate-900 text-white text-xs py-2 px-4 text-center font-medium">
-            <span class="inline-flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                Multi-Tenant E-Commerce Management System • Powered by Laravel & Vue.js
-            </span>
-        </div>
-
         <!-- Main Storefront Header -->
         <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -173,11 +165,11 @@ const mobileMenuOpen = ref(false);
                     </div>
 
                     <div class="text-xs text-slate-500 text-center md:text-right">
-                        <p>© 2026 ShopSphere System. Designed for Enterprise Evaluation.</p>
-                        <p class="mt-1">Candidate Task: Small E-commerce Management</p>
+                        <p>© 2026 ShopSphere Marketplace. All rights reserved.</p>
                     </div>
                 </div>
             </div>
         </footer>
     </div>
 </template>
+
