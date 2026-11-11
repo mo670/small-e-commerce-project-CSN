@@ -1,7 +1,7 @@
 # ShopSphere — Small E-Commerce Management System
 
 > **Author:** [@mo670](https://github.com/mo670)  
-> **Repository:** `https://github.com/mo670/ecommerce-management`  
+> **Repository:** `https://github.com/mo670/small-e-commerce-project-CSN`  
 > **Tech Stack:** Laravel 12 (PHP 8.2+) • Vue.js 3 (Inertia.js + Composition API + Tailwind CSS) • MySQL / SQLite Compatible
 
 ---
@@ -85,8 +85,8 @@ Make sure you have the following installed on your machine:
 
 ### Step 1: Clone the Repository
 ```bash
-git clone https://github.com/mo670/ecommerce-management.git
-cd ecommerce-management
+git clone https://github.com/mo670/small-e-commerce-project-CSN.git
+cd small-e-commerce-project-CSN
 ```
 
 ### Step 2: Install PHP & Node Dependencies
