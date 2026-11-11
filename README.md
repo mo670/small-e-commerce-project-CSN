@@ -1,17 +1,18 @@
 # ShopSphere — Small E-Commerce Management System
 
-> **Candidate Task Submission**  
+> **Author:** [@mo670](https://github.com/mo670)  
+> **Repository:** `https://github.com/mo670/ecommerce-management`  
 > **Tech Stack:** Laravel 12 (PHP 8.2+) • Vue.js 3 (Inertia.js + Composition API + Tailwind CSS) • MySQL / SQLite Compatible
 
 ---
 
 ## 1. Project Overview & Architectural Design
 
-ShopSphere is a multi-tenant e-commerce management system developed to fulfill the **Small E-commerce Management** candidate requirements. It implements a **Shared Product Catalog** pattern where:
-- Administrators and Shop Owners can contribute master products into a universal catalog.
-- Shop owners can browse the shared catalog and select products to list in their individual storefronts.
-- Shop owners have the autonomy to **override and customize product prices, marketing details, descriptions, and thumbnail images** specifically for their stores without affecting the master catalog or other merchants.
-- Customers browse store-specific storefronts and **only see products assigned to that particular shop** with its customized pricing and thumbnail. Unassigned catalog products are strictly invisible to customers.
+ShopSphere is a multi-tenant e-commerce management system developed to fulfill the **Small E-commerce Management** requirements. It implements a **Shared Product Catalog** pattern where:
+- **Administrators** and **Shop Owners** can contribute master products into a universal catalog.
+- **Shop Owners** can browse the shared catalog and select products to list in their individual storefronts.
+- **Shop Owners** have the autonomy to **override and customize product prices, marketing details, descriptions, and thumbnail images** specifically for their stores without affecting the master catalog or other merchants.
+- **Customers** browse store-specific storefronts, **only see products assigned to that particular shop** with its customized pricing and thumbnail, and can add items to their **Shopping Cart** and complete checkout. Unassigned catalog products are strictly invisible to customers.
 
 ```
                           ┌────────────────────────┐
@@ -42,20 +43,21 @@ ShopSphere is a multi-tenant e-commerce management system developed to fulfill t
 
 ---
 
-## 2. Requirements Matrix
+## 2. Functional Requirements Matrix
 
 | Requirement | Implementation Details | Status |
 |---|---|:---:|
-| **Admin Authentication** | Secure Laravel multi-role auth, session protection, `EnsureUserIsAdmin` middleware. | Verified |
-| **Admin Shop Management (CRUD)** | Create, list, edit, and delete shops, manage domain slugs, logos, banners, and status. | Verified |
-| **Admin Product Management (CRUD)** | Full CRUD on the master catalog with SKU, category, base price, thumbnail, and descriptions. | Verified |
-| **Manage Shop Owner Accounts** | Admin can create shop owners, manage status, and map/reassign them to stores. | Verified |
-| **Browse Shared Catalog** | Shop owners can search and filter the shared catalog with one-click "Add to Shop". | Verified |
-| **Shared Catalog Availability** | Products created by admin or any shop owner immediately appear in the shared catalog. | Verified |
-| **Shop Owner Product Creation** | Shop owners can create products that save to the shared catalog and auto-assign to their shop. | Verified |
-| **Shop-Specific Customization** | Shop owners can override and set custom prices, details, thumbnails, and stock for their shop. | Verified |
-| **Customer Shop-Specific View** | Customers only see active products assigned to a visited shop with shop-specific prices & images. | Verified |
-| **Unassigned Products Hidden** | Products unassigned to any shop are never visible in customer storefronts (tested via automated test). | Verified |
+| **Admin Authentication** | Secure Laravel multi-role auth, session protection, `EnsureUserIsAdmin` middleware. | ✅ Verified |
+| **Admin Shop Management (CRUD)** | Create, list, edit, and delete shops, manage domain slugs, logos, banners, and status. | ✅ Verified |
+| **Admin Product Management (CRUD)** | Full CRUD on the master catalog with SKU, category, base price, thumbnail, and descriptions. | ✅ Verified |
+| **Manage Shop Owner Accounts** | Admin can create shop owners, manage status, and map/reassign them to stores. | ✅ Verified |
+| **Browse Shared Catalog** | Shop owners can search and filter the shared catalog with one-click "Add to Shop". | ✅ Verified |
+| **Shared Catalog Availability** | Products created by admin or any shop owner immediately appear in the shared catalog. | ✅ Verified |
+| **Shop Owner Product Creation** | Shop owners can create products that save to the shared catalog and auto-assign to their shop. | ✅ Verified |
+| **Shop-Specific Customization** | Shop owners can override and set custom prices, details, thumbnails, and stock for their shop. | ✅ Verified |
+| **Customer Shop-Specific View** | Customers only see active products assigned to a visited shop with shop-specific prices & images. | ✅ Verified |
+| **Unassigned Products Hidden** | Products unassigned to any shop are never visible in customer storefronts (tested via automated test). | ✅ Verified |
+| **Customer Add to Cart & Checkout** | Persistent reactive shopping cart (`useCart`), slide-over cart drawer, quantity controls, and checkout. | ✅ Verified |
 
 ---
 
@@ -64,14 +66,14 @@ ShopSphere is a multi-tenant e-commerce management system developed to fulfill t
 - **Backend:** Laravel 12 (PHP 8.2+)
 - **Architecture:** Clean Architecture with Service Layer (`ProductCatalogService`, `ShopManagementService`, `StorefrontService`) & Form Requests
 - **Frontend:** Vue.js 3 (`<script setup>` Composition API), Inertia.js, Tailwind CSS, Lucide Icons (`lucide-vue-next`)
-- **Database:** SQLite (default for zero-configuration testing) or MySQL (fully supported via `.env`)
+- **Database:** SQLite (default for zero-configuration evaluation) or MySQL (fully supported via `.env`)
 - **Testing:** PHPUnit / Laravel Feature Tests (100% passed, 34 tests, 101 assertions)
 
 ---
 
 ## 4. Setup & Running Instructions (Step-by-Step)
 
-Follow these clear, step-by-step instructions to set up and run the project from a fresh clone.
+Follow these step-by-step instructions to set up and run the project from a fresh clone.
 
 ### Prerequisites
 Make sure you have the following installed on your machine:
@@ -83,7 +85,7 @@ Make sure you have the following installed on your machine:
 
 ### Step 1: Clone the Repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/mo670/ecommerce-management.git
 cd ecommerce-management
 ```
 
@@ -96,9 +98,12 @@ npm install
 ### Step 3: Environment Setup
 Copy the example environment file:
 ```bash
+# Linux / macOS / Git Bash:
 cp .env.example .env
+
+# Windows PowerShell:
+copy .env.example .env
 ```
-*(On Windows PowerShell, use: `copy .env.example .env`)*
 
 Generate application encryption key:
 ```bash
@@ -113,14 +118,14 @@ php artisan storage:link
 
 ### Step 5: Database Setup & Demo Seeding
 
-#### Option A: SQLite (Quickest, Zero Configuration - Recommended for Evaluation)
-Ensure SQLite is selected in `.env` (it is the default in `.env.example`):
+#### Option A: SQLite (Quickest, Zero Configuration — Default in `.env.example`)
+Ensure SQLite is selected in `.env`:
 ```env
 DB_CONNECTION=sqlite
 ```
 Create the SQLite database file if it does not exist:
 ```bash
-# Linux/macOS:
+# Linux / macOS:
 touch database/database.sqlite
 
 # Windows PowerShell:
@@ -186,23 +191,24 @@ The database seeder automatically creates pre-configured accounts and stores. Yo
 ### 2. Test Shop Owner & Shared Catalog Flow
 1. Log in as `techowner@example.com` / `password`.
 2. Navigate to **Shared Catalog** (`/shop-owner/catalog`):
-   - Notice you can browse all products created by Admin or other merchants.
+   - Browse all products created by Admin or other merchants.
    - Click **"Add to Shop"** on any item. A modal appears allowing you to specify **your own price**, **custom details**, and **custom thumbnail**.
 3. Navigate to **My Shop Products** (`/shop-owner/my-products`):
-   - Modify prices, descriptions, and stock counts.
+   - Modify prices, descriptions, thumbnails, and stock counts.
 4. Click **Create Product** (`/shop-owner/my-products/create`):
    - Fill in product information.
    - Upon submission, the product is published to the **shared catalog** for all other merchants, and automatically added to your store.
-5. Log in as `fashionowner@example.com` and notice that the new product created by `techowner` is now visible in the catalog ready to be added!
+5. Log in as `fashionowner@example.com` and verify that the new product created by `techowner` is now visible in the shared catalog ready to be added.
 
-### 3. Test Customer Storefront & Visibility Rule
+### 3. Test Customer Storefront, Visibility Rule & Shopping Cart
 1. Visit the public home page at **`http://localhost:8000`**.
 2. Click on **"Nexus Tech Hub"** (`/shop/nexus-tech-hub`):
    - Observe only products assigned to Nexus Tech Hub are shown.
-   - Notice the shop-specific price overrides (e.g. MacBook Air listed at $1249 with Tech Hub warranty bundle).
+   - Notice the shop-specific price overrides (e.g. MacBook Air listed at $1249.00 with Tech Hub warranty bundle).
+   - Click **"Add to Cart"** on any product or open a product page to select quantity and click **"Buy Now"** to open the interactive slide-over Cart Drawer and complete checkout.
 3. Click on **"Aura Lifestyle"** (`/shop/aura-lifestyle`):
    - Notice only apparel and lifestyle products assigned to Aura are shown.
-   - Observe that the *Stainless Steel Tumbler* shared product is listed at $35.00 with custom Aura styling, while in another shop it has a different price.
+   - Observe that the *Stainless Steel Tumbler* shared product is listed at $35.00 with custom Aura styling, while in *Urban Craft & Living* it is listed at $30.00.
 4. **Unassigned Products Test:**
    - In the seeder, the product **"DJI Mini 4 Pro Drone (Unassigned Catalog Item)"** exists in the master catalog but is NOT assigned to any shop.
    - Browse any shop storefront — this product is **strictly invisible** to customers, fulfilling the core rule: *"Products that are not assigned to any shop must not be visible to customers."*
@@ -265,17 +271,10 @@ Tests: 34 passed (101 assertions)
 │   └── seeders/DatabaseSeeder.php   # Demo admin, shop owners, shops, and products
 ├── resources/
 │   └── js/
-│       ├── Components/              # Reusable UI (ImageUploader, Pagination, StatCard, Toast)
+│       ├── Components/              # Reusable UI (CartDrawer, ImageUploader, Pagination, StatCard, Toast)
+│       ├── Composables/             # Reactive state (useCart.js)
 │       ├── Layouts/                 # AdminLayout, ShopOwnerLayout, StorefrontLayout
 │       └── Pages/                   # Vue 3 Inertia page components
 └── routes/
     └── web.php                      # Organized route definitions with role-gated groups
 ```
-
----
-
-## 9. License & Submission Info
-
-- **Candidate Task:** Small E-commerce Management
-- **Date:** November 2026
-- **Status:** Complete, Production-Ready, Fully Tested.
