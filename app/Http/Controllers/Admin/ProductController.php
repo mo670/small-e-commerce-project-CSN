@@ -94,3 +94,4 @@ class ProductController extends Controller
             ->with('success', 'Product removed from catalog.');
     }
 }
+

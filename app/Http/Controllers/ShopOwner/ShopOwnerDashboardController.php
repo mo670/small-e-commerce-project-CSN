@@ -42,3 +42,4 @@ class ShopOwnerDashboardController extends Controller
         ]);
     }
 }
+

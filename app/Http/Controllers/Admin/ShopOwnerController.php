@@ -132,3 +132,4 @@ class ShopOwnerController extends Controller
             ->with('success', 'Shop owner deleted successfully.');
     }
 }
+

@@ -79,3 +79,4 @@ class Shop extends Model
         return $this->products()->wherePivot('is_active', true);
     }
 }
+

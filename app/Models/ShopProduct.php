@@ -70,3 +70,4 @@ class ShopProduct extends Pivot
         return $query->where('is_active', true);
     }
 }
+

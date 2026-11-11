@@ -3,18 +3,16 @@ import { ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import StorefrontLayout from '@/Layouts/StorefrontLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
+import { useCart } from '@/Composables/useCart';
 import { 
     Store, 
     Search, 
-    Layers, 
     MapPin, 
     Phone, 
     Mail, 
     ArrowLeft, 
     ShoppingBag, 
-    Tag,
-    ChevronDown,
-    ShieldCheck
+    ShoppingCart
 } from 'lucide-vue-next';
 
 const props = defineProps({
@@ -23,6 +21,8 @@ const props = defineProps({
     categories: Array,
     filters: Object,
 });
+
+const { addToCart } = useCart();
 
 const search = ref(props.filters.search || '');
 const category = ref(props.filters.category || '');
@@ -162,13 +162,12 @@ const applyFilters = () => {
 
                 <!-- Product Grid (Assigned to THIS shop only!) -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    <Link
+                    <div
                         v-for="item in shopProducts.data"
                         :key="item.id"
-                        :href="route('storefront.product', [shop.slug, item.id])"
                         class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs hover:shadow-lg hover:border-indigo-300 transition-all flex flex-col justify-between group"
                     >
-                        <div>
+                        <Link :href="route('storefront.product', [shop.slug, item.id])" class="block">
                             <!-- Thumbnail (Shop specific override or fallback) -->
                             <div class="relative h-48 bg-slate-100 overflow-hidden">
                                 <img
@@ -195,20 +194,26 @@ const applyFilters = () => {
                                     {{ item.details || item.product?.description || 'No description provided.' }}
                                 </p>
                             </div>
-                        </div>
+                        </Link>
 
-                        <!-- Card Pricing Footer -->
-                        <div class="p-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <!-- Card Pricing & Add to Cart Footer -->
+                        <div class="p-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
                             <div>
                                 <span class="text-[10px] text-slate-400 block font-semibold uppercase">Shop Price</span>
                                 <span class="text-lg font-black text-slate-900">${{ Number(item.price).toFixed(2) }}</span>
                             </div>
 
-                            <span class="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 group-hover:text-indigo-700">
-                                View Item →
-                            </span>
+                            <button
+                                type="button"
+                                :disabled="item.stock <= 0"
+                                @click.stop="addToCart(item, shop, 1)"
+                                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold shadow-xs hover:bg-indigo-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                            >
+                                <ShoppingCart class="w-3.5 h-3.5" />
+                                <span>Add to Cart</span>
+                            </button>
                         </div>
-                    </Link>
+                    </div>
 
                     <div v-if="shopProducts.data.length === 0" class="col-span-full py-16 text-center text-slate-400 bg-white rounded-3xl border border-slate-200">
                         <ShoppingBag class="w-10 h-10 mx-auto mb-2 text-slate-300 stroke-1" />

@@ -27,3 +27,4 @@ class ShopOwnerRequest extends FormRequest
         ];
     }
 }
+

@@ -28,3 +28,4 @@ class EnsureUserIsShopOwner
         return $next($request);
     }
 }
+

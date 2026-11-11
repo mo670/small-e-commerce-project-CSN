@@ -54,3 +54,4 @@ watch(() => page.props.flash, (flash) => {
         </button>
     </div>
 </template>
+

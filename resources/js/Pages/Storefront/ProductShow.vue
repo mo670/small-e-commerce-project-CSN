@@ -1,17 +1,18 @@
 <script setup>
+import { ref } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
 import StorefrontLayout from '@/Layouts/StorefrontLayout.vue';
+import { useCart } from '@/Composables/useCart';
 import { 
     Store, 
-    ArrowLeft, 
     CheckCircle2, 
     AlertCircle, 
     Truck, 
     ShieldCheck, 
-    ShoppingBag, 
-    Sparkles,
-    Tag,
-    Share2
+    ShoppingCart,
+    Plus,
+    Minus,
+    Zap
 } from 'lucide-vue-next';
 
 const props = defineProps({
@@ -19,6 +20,26 @@ const props = defineProps({
     shopProduct: Object,
     relatedProducts: Array,
 });
+
+const { addToCart, openCart } = useCart();
+const quantity = ref(1);
+
+const incrementQty = () => {
+    if (quantity.value < (props.shopProduct.stock || 1)) {
+        quantity.value++;
+    }
+};
+
+const decrementQty = () => {
+    if (quantity.value > 1) {
+        quantity.value--;
+    }
+};
+
+const handleBuyNow = () => {
+    addToCart(props.shopProduct, props.shop, quantity.value);
+    openCart();
+};
 </script>
 
 <template>
@@ -98,7 +119,55 @@ const props = defineProps({
                                     ${{ Number(shopProduct.price).toFixed(2) }}
                                 </span>
                             </div>
-                            <p class="text-[11px] text-slate-500">Tax included. Shipping calculated at checkout.</p>
+                            <p class="text-[11px] text-slate-500">Tax included. Free shipping at checkout.</p>
+                        </div>
+
+                        <!-- Quantity & Add to Cart Controls -->
+                        <div class="pt-2 space-y-3">
+                            <div class="flex flex-wrap items-center gap-4">
+                                <!-- Quantity Selector -->
+                                <div class="inline-flex items-center rounded-xl border border-slate-200 bg-slate-50 p-1">
+                                    <button
+                                        type="button"
+                                        @click="decrementQty"
+                                        :disabled="quantity <= 1 || shopProduct.stock <= 0"
+                                        class="p-2 rounded-lg text-slate-600 hover:bg-white hover:text-slate-900 disabled:opacity-40 transition-colors"
+                                    >
+                                        <Minus class="w-4 h-4" />
+                                    </button>
+                                    <span class="px-4 text-sm font-extrabold text-slate-900">{{ quantity }}</span>
+                                    <button
+                                        type="button"
+                                        @click="incrementQty"
+                                        :disabled="quantity >= shopProduct.stock || shopProduct.stock <= 0"
+                                        class="p-2 rounded-lg text-slate-600 hover:bg-white hover:text-slate-900 disabled:opacity-40 transition-colors"
+                                    >
+                                        <Plus class="w-4 h-4" />
+                                    </button>
+                                </div>
+
+                                <!-- Add to Cart Button -->
+                                <button
+                                    type="button"
+                                    :disabled="shopProduct.stock <= 0"
+                                    @click="addToCart(shopProduct, shop, quantity)"
+                                    class="flex-1 inline-flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-indigo-600 text-white text-sm font-bold shadow-md shadow-indigo-100 hover:bg-indigo-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                                >
+                                    <ShoppingCart class="w-4 h-4" />
+                                    <span>Add to Cart</span>
+                                </button>
+
+                                <!-- Buy Now Button -->
+                                <button
+                                    type="button"
+                                    :disabled="shopProduct.stock <= 0"
+                                    @click="handleBuyNow"
+                                    class="inline-flex items-center justify-center gap-1.5 py-3 px-5 rounded-xl bg-slate-900 text-white text-sm font-bold hover:bg-slate-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                                >
+                                    <Zap class="w-4 h-4 text-amber-400" />
+                                    <span>Buy Now</span>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Shop-Specific Details & Notes -->
@@ -140,13 +209,12 @@ const props = defineProps({
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                    <Link
+                    <div
                         v-for="rel in relatedProducts"
                         :key="rel.id"
-                        :href="route('storefront.product', [shop.slug, rel.id])"
                         class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs hover:shadow-md hover:border-indigo-300 transition-all flex flex-col justify-between group"
                     >
-                        <div>
+                        <Link :href="route('storefront.product', [shop.slug, rel.id])" class="block">
                             <div class="h-40 bg-slate-100 overflow-hidden">
                                 <img
                                     :src="rel.thumbnail || rel.product?.thumbnail"
@@ -158,13 +226,19 @@ const props = defineProps({
                                 <h4 class="font-bold text-slate-900 text-sm truncate">{{ rel.product?.title }}</h4>
                                 <p class="text-xs text-slate-500 line-clamp-1">{{ rel.details || rel.product?.description }}</p>
                             </div>
-                        </div>
+                        </Link>
 
-                        <div class="p-4 pt-2 flex items-center justify-between text-xs">
+                        <div class="p-4 pt-2 flex items-center justify-between text-xs border-t border-slate-100">
                             <span class="font-black text-slate-900 text-base">${{ Number(rel.price).toFixed(2) }}</span>
-                            <span class="font-bold text-indigo-600">View</span>
+                            <button
+                                type="button"
+                                @click="addToCart(rel, shop, 1)"
+                                class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 font-bold hover:bg-indigo-100 transition-colors"
+                            >
+                                <ShoppingCart class="w-3.5 h-3.5" /> Add
+                            </button>
                         </div>
-                    </Link>
+                    </div>
                 </div>
             </div>
         </div>

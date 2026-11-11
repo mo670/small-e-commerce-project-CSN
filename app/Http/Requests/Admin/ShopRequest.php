@@ -30,3 +30,4 @@ class ShopRequest extends FormRequest
         ];
     }
 }
+

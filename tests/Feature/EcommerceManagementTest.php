@@ -300,3 +300,4 @@ class EcommerceManagementTest extends TestCase
         $responseUnassigned->assertStatus(404);
     }
 }
+

@@ -83,3 +83,4 @@ class ShopController extends Controller
             ->with('success', 'Shop deleted successfully.');
     }
 }
+

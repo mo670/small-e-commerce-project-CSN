@@ -32,3 +32,4 @@ class AdminDashboardController extends Controller
         ]);
     }
 }
+

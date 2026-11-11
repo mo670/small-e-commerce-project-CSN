@@ -196,3 +196,4 @@ const deleteShop = (shop) => {
         </div>
     </AdminLayout>
 </template>
+

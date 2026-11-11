@@ -67,3 +67,4 @@ class CatalogController extends Controller
             ->with('success', "'{$product->title}' has been added to your shop catalog!");
     }
 }
+

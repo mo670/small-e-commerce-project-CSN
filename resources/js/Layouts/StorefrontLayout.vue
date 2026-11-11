@@ -3,25 +3,27 @@ import { ref } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import { 
     ShoppingBag, 
+    ShoppingCart,
     Store, 
-    Search, 
-    User, 
     LayoutDashboard, 
     Menu, 
     X, 
-    ExternalLink,
     ShieldCheck
 } from 'lucide-vue-next';
 import Toast from '@/Components/Toast.vue';
+import CartDrawer from '@/Components/CartDrawer.vue';
+import { useCart } from '@/Composables/useCart';
 
 const page = usePage();
 const user = page.props.auth?.user;
 const mobileMenuOpen = ref(false);
+const { cartCount, openCart } = useCart();
 </script>
 
 <template>
     <div class="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-800">
         <Toast />
+        <CartDrawer />
 
         <!-- Main Storefront Header -->
         <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs">
@@ -53,6 +55,23 @@ const mobileMenuOpen = ref(false);
 
                     <!-- Right Controls (Desktop) -->
                     <div class="hidden md:flex items-center gap-4">
+                        <!-- Shopping Cart Button -->
+                        <button
+                            type="button"
+                            @click="openCart"
+                            class="relative inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-sm font-semibold transition-colors"
+                            title="Open Shopping Cart"
+                        >
+                            <ShoppingCart class="w-4 h-4 text-indigo-600" />
+                            <span>Cart</span>
+                            <span
+                                v-if="cartCount > 0"
+                                class="ml-0.5 px-2 py-0.5 rounded-full text-[11px] font-bold bg-indigo-600 text-white"
+                            >
+                                {{ cartCount }}
+                            </span>
+                        </button>
+
                         <template v-if="user">
                             <Link
                                 v-if="user.role === 'admin'"
@@ -96,8 +115,22 @@ const mobileMenuOpen = ref(false);
                         </template>
                     </div>
 
-                    <!-- Mobile Menu Trigger -->
-                    <div class="flex md:hidden">
+                    <!-- Mobile Menu & Cart Trigger -->
+                    <div class="flex items-center gap-2 md:hidden">
+                        <button
+                            type="button"
+                            @click="openCart"
+                            class="relative p-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-700"
+                        >
+                            <ShoppingCart class="w-5 h-5 text-indigo-600" />
+                            <span
+                                v-if="cartCount > 0"
+                                class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full text-[10px] font-bold bg-indigo-600 text-white flex items-center justify-center"
+                            >
+                                {{ cartCount }}
+                            </span>
+                        </button>
+
                         <button
                             @click="mobileMenuOpen = !mobileMenuOpen"
                             class="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100"
@@ -172,4 +205,3 @@ const mobileMenuOpen = ref(false);
         </footer>
     </div>
 </template>
-

@@ -85,3 +85,4 @@ class ProductCatalogService
         return (bool) $product->delete();
     }
 }
+

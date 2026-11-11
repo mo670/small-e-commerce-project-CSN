@@ -224,3 +224,4 @@ const removeProduct = (item) => {
         </div>
     </ShopOwnerLayout>
 </template>
+

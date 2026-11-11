@@ -147,3 +147,4 @@ class MyProductController extends Controller
             ->with('success', 'Product removed from your shop (remains in shared catalog).');
     }
 }
+

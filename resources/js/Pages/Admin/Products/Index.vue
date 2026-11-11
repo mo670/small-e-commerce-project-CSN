@@ -201,3 +201,4 @@ const deleteProduct = (product) => {
         </div>
     </AdminLayout>
 </template>
+

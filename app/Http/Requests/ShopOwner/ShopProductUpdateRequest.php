@@ -22,3 +22,4 @@ class ShopProductUpdateRequest extends FormRequest
         ];
     }
 }
+
